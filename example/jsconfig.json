@@ -1,0 +1,18 @@
+{
+	"compilerOptions": {
+		"alwaysStrict": true,
+		"allowJs": true,
+		"checkJs": true,
+		"forceConsistentCasingInFileNames": true,
+		"noImplicitAny": true,
+		"lib": ["es2020"],
+		"target": "es2020",
+		"module": "NodeNext",
+		"baseUrl": "./",
+		"maxNodeModuleJsDepth": 0,
+		"paths": {
+			"*": ["scripts"]
+		}
+	},
+	"include": ["scripts"]
+}

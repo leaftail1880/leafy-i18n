@@ -1,0 +1,2 @@
+# Endings of executable scripts need to be LF
+bin.js text eol=lf
