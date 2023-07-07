@@ -34,7 +34,6 @@ function check(result) {
  * }} a1
  */
 export function find({ project, codeLocale }) {
-  console.debug("Loading ts...");
   const configPath = ts.findConfigFile("./", ts.sys.fileExists, project);
   if (!configPath) {
     console.error("No ts config found at path", project);
@@ -50,7 +49,6 @@ export function find({ project, codeLocale }) {
       "./"
     )
   );
-  console.debug("Parsed ts config successfully.");
   const { fileNames } = check(
     ts.parseJsonConfigFileContent(config, ts.sys, path.dirname(configPath))
   );
@@ -75,11 +73,14 @@ export function find({ project, codeLocale }) {
       node.tag.escapedText === "i18n"
     ) {
       const t = node.template;
+      /** @type {{literal: {rawText: string}}[]} */
       // @ts-ignore
       const spans = t.templateSpans ?? [];
-      const quasis = [t.head ?? t, ...spans.map((e) => e.literal)].map(
-        (e) => e?.rawText
-      );
+      const quasis = [
+        // @ts-ignore
+        t.head?.rawText ?? t.rawText,
+        ...spans.map((e) => e.literal.rawText),
+      ];
       // console.debug(Object.assign(template, { parent: null }));
 
       // @ts-ignore
@@ -87,14 +88,11 @@ export function find({ project, codeLocale }) {
         t: null,
         v: spans.map((e, i) => i),
       };
-
-      // visitQuasi(item.quasi); // maybe
     }
 
     ts.forEachChild(node, visit);
   }
 
-  // Process each source file
   for (const sourceFile of program.getSourceFiles()) {
     if (!sourceFile.isDeclarationFile) {
       files++;
@@ -107,7 +105,7 @@ export function find({ project, codeLocale }) {
       Object.keys(i18n).length
     } locales.`
   );
-  console.log(i18n);
+  console.debug(i18n);
 
   return i18n;
 }
