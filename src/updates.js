@@ -1,3 +1,5 @@
+import "./jaro-winkler.js"
+
 /**
  * @param {string} chunk
  * @param {number} i
