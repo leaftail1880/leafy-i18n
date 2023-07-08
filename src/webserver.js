@@ -3,7 +3,7 @@ import fs from "fs/promises";
 import path from "path";
 import url from "url";
 import open from "open";
-import { createTable, createUpdate } from "./updates.js";
+import { createTable, createUpdate } from "./utils.js";
 
 /**
  * @param {{
@@ -54,7 +54,13 @@ export async function listen({ port = 1186, locales = [], db, codeLocale }) {
           send(200, "OK");
           setTimeout(() => {
             server.close();
-            console.log("Done");
+            console.log(
+              `[li18n] Done.${
+                Object.keys(oldTranslation).length
+                  ? ""
+                  : " Translations saved to i18n/translations.json"
+              }`
+            );
           }, 200);
           break;
         case "/update":
@@ -74,6 +80,7 @@ export async function listen({ port = 1186, locales = [], db, codeLocale }) {
             try {
               await fs.writeFile(file, body.join(""));
             } catch (e) {
+              console.error(e);
               return send(500, "Internal Server Error", e);
             }
 
@@ -82,14 +89,13 @@ export async function listen({ port = 1186, locales = [], db, codeLocale }) {
           break;
 
         default:
-          res.writeHead(404, "Not Found");
-          res.end();
+          send(404, "Not Found");
           break;
       }
     })
     .listen(port, async () => {
       const url = `http://localhost:${port}/`;
       open(url);
-      console.log("Updating via " + url);
+      console.log("[li18n] Updating via " + url);
     });
 }

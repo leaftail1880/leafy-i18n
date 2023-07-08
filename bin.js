@@ -49,6 +49,7 @@ program
       : (...data) => console.log(data);
 
     console.debug("Config parsed successfully!");
+    console.log("[li18n] Loading...");
     const i18n = (await import("./src/find.js")).find({
       project: options.project,
       codeLocale: options.codeLocale,

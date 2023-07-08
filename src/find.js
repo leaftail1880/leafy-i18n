@@ -1,6 +1,8 @@
 import ts from "typescript";
 import path from "path";
 import fs from "fs";
+import {toArray} from "./utils.js"
+import util from "util"
 
 const formatHost = {
   getCanonicalFileName: (/** @type {string} */ path) => path,
@@ -33,12 +35,16 @@ function check(result) {
  * codeLocale: string
  * }} a1
  */
-export function find({ project, codeLocale }) {
+export function find({ project, codeLocale = "en" }) {
   const configPath = ts.findConfigFile("./", ts.sys.fileExists, project);
   if (!configPath) {
-    console.error("No ts config found at path", project);
+    console.error(
+      "No typescript config found at path '" +
+        project +
+        "'\n\nYou can change 'project' option in config or in command line"
+    );
     process.exit(1);
-  } else console.debug("Using ts config from:", configPath);
+  } else console.debug("Using typescript config from:", configPath);
   const { config } = check(ts.readConfigFile(configPath, ts.sys.readFile));
   const { options } = check(
     ts.convertCompilerOptionsFromJson(
@@ -58,10 +64,9 @@ export function find({ project, codeLocale }) {
   const program = ts.createProgram(fileNames, options);
   check({ errors: ts.getPreEmitDiagnostics(program) });
 
-  let files = 0;
+  
   /** @type {i18nDB} */
-  const i18n = {};
-  const locale = codeLocale ?? "en";
+  const i18n = {}
 
   /**
    * @param {ts.Node} node
@@ -82,17 +87,17 @@ export function find({ project, codeLocale }) {
         ...spans.map((e) => e.literal.rawText),
       ];
       // console.debug(Object.assign(template, { parent: null }));
-
-      // @ts-ignore
-      (i18n[quasis.join("\x01")] = {})[locale] = {
-        t: null,
-        v: spans.map((e, i) => i),
-      };
+      const key = quasis.join("\x01")
+      console.debug(key)
+      
+      i18n[key] ??= {};
+      i18n[key][codeLocale] = toArray(key)
     }
 
     ts.forEachChild(node, visit);
   }
 
+  let files = 0;
   for (const sourceFile of program.getSourceFiles()) {
     if (!sourceFile.isDeclarationFile) {
       files++;
@@ -101,11 +106,11 @@ export function find({ project, codeLocale }) {
   }
 
   console.log(
-    `[i18n] Parsed total ${files} files with ${
+    `[li18n] Parsed total ${files} files with ${
       Object.keys(i18n).length
     } locales.`
   );
-  console.debug(i18n);
+  console.log(util.inspect(i18n, { depth: 30}));
 
   return i18n;
 }
