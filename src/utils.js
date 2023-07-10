@@ -17,8 +17,7 @@ export function toText(array) {
 /**
  * @param {string} text
  */
-export function toArray(text) {
-  const splitted = text.split("\x01");
+export function toArray(text, splitted = text.split("\x01")) {
   if (splitted.length === 1) return splitted;
   const result = splitted.reduce(
     // Make it look like ["This ", 0, " template"]

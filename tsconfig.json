@@ -11,6 +11,7 @@
 		"noEmit": true,
 		"baseUrl": ".",
 		"maxNodeModuleJsDepth": 0,
+		"skipLibCheck": true,
 	},
 	"include": ["./bin.js", "src"]
 }

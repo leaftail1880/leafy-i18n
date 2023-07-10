@@ -91,7 +91,7 @@ export function find({ project, codeLocale = "en" }) {
       console.debug(key)
       
       i18n[key] ??= {};
-      i18n[key][codeLocale] = toArray(key)
+      i18n[key][codeLocale] = toArray("", quasis)
     }
 
     ts.forEachChild(node, visit);
