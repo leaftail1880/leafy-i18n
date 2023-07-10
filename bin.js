@@ -22,7 +22,7 @@ program
   )
   .option("--debug", "Enable progres information.")
   .option("--noBrowser", "Stop process after finding i18n calls. Usefull for debugging.")
-  .action(async function li18n(program, opts) {
+  .action(async function li18n() {
     let config;
     try {
       config = (await fs.readFile("i18n/config.json")).toString();
