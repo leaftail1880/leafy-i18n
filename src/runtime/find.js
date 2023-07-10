@@ -1,8 +1,8 @@
 import ts from "typescript";
 import path from "path";
 import fs from "fs";
-import {toArray} from "./utils.js"
-import util from "util"
+import { toArray } from "../utils.js";
+import util from "util";
 
 const formatHost = {
   getCanonicalFileName: (/** @type {string} */ path) => path,
@@ -64,9 +64,8 @@ export function find({ project, codeLocale = "en" }) {
   const program = ts.createProgram(fileNames, options);
   check({ errors: ts.getPreEmitDiagnostics(program) });
 
-  
   /** @type {i18nDB} */
-  const i18n = {}
+  const i18n = {};
 
   /**
    * @param {ts.Node} node
@@ -87,11 +86,11 @@ export function find({ project, codeLocale = "en" }) {
         ...spans.map((e) => e.literal.rawText),
       ];
       // console.debug(Object.assign(template, { parent: null }));
-      const key = quasis.join("\x01")
-      console.debug(key)
-      
+      const key = quasis.join("\x01");
+      console.debug(key);
+
       i18n[key] ??= {};
-      i18n[key][codeLocale] = toArray("", quasis)
+      i18n[key][codeLocale] = toArray("", quasis);
     }
 
     ts.forEachChild(node, visit);
@@ -110,7 +109,7 @@ export function find({ project, codeLocale = "en" }) {
       Object.keys(i18n).length
     } locales.`
   );
-  console.log(util.inspect(i18n, { depth: 30}));
+  console.log(util.inspect(i18n, { depth: 30 }));
 
   return i18n;
 }

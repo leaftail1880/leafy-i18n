@@ -1,19 +1,17 @@
 {
-	"compilerOptions": {
-		"alwaysStrict": true,
-		"allowJs": true,
-		"checkJs": true,
-		"forceConsistentCasingInFileNames": true,
-		"noImplicitAny": true,
-		"lib": ["es2020"],
-		"target": "es2020",
-		"module": "NodeNext",
-		"noEmit": true,
-		"baseUrl": ".",
-		"maxNodeModuleJsDepth": 0,
-		"skipLibCheck": true,
-	},
-	"include": ["./bin.js", "src"]
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "allowJs": true,
+    "checkJs": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
+    "lib": ["es2020"],
+    "target": "es2020",
+    "module": "NodeNext",
+    "noEmit": true,
+    "baseUrl": ".",
+    "maxNodeModuleJsDepth": 0,
+    "skipLibCheck": true
+  },
+  "include": ["./bin.js", "src"]
 }
-
-

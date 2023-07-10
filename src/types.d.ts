@@ -1,9 +1,9 @@
-declare type i18nTable = Record<string, Array<number | string>>;
-declare type i18nDB = Record<string, i18nTable>;
+declare type i18nTable = import("./export").i18nTable;
+declare type i18nDB = import("/export").i18nDB;
 
 interface String {
-  distance(to: string): number
+  distance(to: string): number;
 }
 interface Console {
-  debug(...data: any): void
+  debug(...data: any): void;
 }

@@ -3,17 +3,17 @@ import fs from "fs/promises";
 import path from "path";
 import url from "url";
 import open from "open";
-import { createTable, createUpdate } from "./utils.js";
+import { createTable, createUpdate } from "./updates.js";
 
 /**
  * @param {{
- * port: number,
+ * port: string,
  * locales: string[],
  * db: i18nDB,
  * codeLocale: string
  * }} a1
  */
-export async function listen({ port = 1186, locales = [], db, codeLocale }) {
+export async function listen({ port = "1186", locales = [], db, codeLocale }) {
   const index = (
     await fs.readFile(
       path.join(url.fileURLToPath(new URL(".", import.meta.url)), "index.html")
@@ -93,7 +93,7 @@ export async function listen({ port = 1186, locales = [], db, codeLocale }) {
           break;
       }
     })
-    .listen(port, async () => {
+    .listen(Number(port), async () => {
       const url = `http://localhost:${port}/`;
       open(url);
       console.log("[li18n] Updating via " + url);
