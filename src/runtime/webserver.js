@@ -16,7 +16,7 @@ import { createTable, createUpdate } from "./updates.js";
 export async function listen({ port = "1186", locales = [], db, codeLocale }) {
   const index = (
     await fs.readFile(
-      path.join(url.fileURLToPath(new URL(".", import.meta.url)), "index.html")
+      path.join(url.fileURLToPath(new URL(".", import.meta.url)), "../index.html")
     )
   ).toString();
 

@@ -5,7 +5,7 @@ import { program } from "commander";
 import fs from "fs/promises";
 
 program
-  .command("li18n [options]")
+  .usage("[options]")
   .description(
     "Parses project, finds i18n calls and opens browser to translate them. All options can be setted in the i18n/config.json. Command line options take precedence over the config."
   )
@@ -17,15 +17,15 @@ program
   )
   .option(
     "--port <number>",
-    "Localhost port for updates (1186 by default).",
+    "Localhost port for updates.",
     "1186"
   )
   .option("--debug", "Enable progres information.")
   .option("--noBrowser", "Stop process after finding i18n calls. Usefull for debugging.")
-  .action(async function li18n() {
+  .action(async function li18n(opts, program) {
     let config;
     try {
-      config = (await fs.readFile("i18n/config.json")).toString();
+      config = await fs.readFile("i18n/config.json", "utf-8")
     } catch (e) {
       if (e.code === "ENOENT") {
         program.error("No config found at 'i18n/config.json'");
@@ -41,12 +41,12 @@ program
       );
     }
 
-    const options = Object.assign(program.opts(), config);
+    const options = Object.assign(opts, config);
     console.debug = !options.debug
       ? () => void 0
       : (...data) => console.log(data);
       
-    if (isNaN(Number(options.port))) program.error("Port '" + options.port + "' isn't a number")
+    if (isNaN(Number(options.port))) program.error("Port '" + options.port + "' isn't a number.")
 
     console.debug("Config parsed successfully!");
     console.log("[li18n] Loading...");
